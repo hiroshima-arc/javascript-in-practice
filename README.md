@@ -591,6 +591,83 @@ npx babel src --extensions '.ts,.tsx' --out-dir lib
 
 これで、TypeScriptファイルが変換され、出力されたJavaScriptファイルにはES5コードが含まれるようになります。
 
+# モジュールバンドラの設定
+
+モジュールバンドラを使用してTypeScriptを変換する手順は以下の通りです。
+
+```
+npm install --save-dev ts-loader
+```
+
+`tsconfig.json`を作成します
+
+```
+npx tsc --init
+```
+
+webpack.config.jsファイルを更新し、以下のように設定します。
+
+```js
+module.exports = {
+  mode: 'development',
+  entry: './src/index_typescript.ts',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js'
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [
+                "@babel/preset-env",
+              ],
+            },
+          },
+        ],
+      },
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader'
+      },
+    ],
+  },
+  target: ["web", "es5"],
+};
+```
+
+実行して確認します。
+
+```
+npm run build
+node ./dist/bundle.js
+```
+
+以下のように表示されれば成功です。
+
+```
+Hello TypeScript
+```
+
+TypeScriptファイルをそのまま実行したい場合は、ts-nodeを使用します。
+
+```
+npm install --save-dev ts-node
+```
+
+動かし方は以下の通りです。
+
+```
+npx ts-node src/index_typescript.ts
+```
+
 **[⬆ back to top](#構成)**
 
 ### 配置
