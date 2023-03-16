@@ -243,6 +243,80 @@ var Person = /*#__PURE__*/function () {
 }();
 ```
 
+# モジュールバンドラ
+
+モジュールバンドラーとは、複数の JavaScript ファイルをまとめ、それらが相互に参照しあえるようにするツールです。JavaScript ファイル内で別のファイルの関数、変数、オブジェクトを参照するためには、そのファイルの読み込みや実行順序を意識する必要がありました。しかし、多数のファイルが存在したり、参照構造が深くなった場合には管理が大変です。
+
+モジュールバンドラーを利用することで、JavaScript の分割管理をしやすくします。そして、それを結合することで一つの JavaScript ファイルにして配信することが可能になります。
+
+代表的なモジュールバンドラーには webpack, Parcel, Rollup などがあります。使い勝手や特徴が微妙に異なりますので、プロジェクトの目的にあわせて選定することが重要です。
+
+# モジュールバンドラのセットアップ
+
+webpackのセットアップには以下の手順があります。
+
+1. インストール
+
+```
+npm install --save-dev webpack webpack-cli
+```
+
+これで、Webpackがインストールされたことを確認できます。
+
+3. 設定ファイルの作成
+Webpackを実行する前に、設定ファイルを用意する必要があります。 webpack.config.js というファイル名で以下のファイルを生成してください。
+
+```js
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js'
+  }
+};
+```
+
+上記の設定ファイルでは、エントリーポイントとなるJSファイルが ./src/index.js であることを指定し、そのファイルからバンドルされたJSファイルを ./dist/bundle.js として出力するように指定しています。
+
+以上の手順を経て、Webpackがセットアップされました。開発時にはnpm scriptsを使用してWebpackを実行することをおすすめします。
+
+# モジュールバンドラの実行
+
+npm scriptsを使用してWebpackを実行することをおすすめします。
+
+```json
+{
+  "scripts": {
+    "build": "webpack"
+  }
+}
+```
+
+上記のようにpackage.jsonにscriptsを追加することで、npm run build でWebpackを実行することができます。
+
+`./src/sample_es5.js` に以下のコードを記述してください。
+
+```js
+function greeting(name) {
+  return 'Hello ' + name;
+}
+
+module.exports = greeting;
+```
+
+`./src/index.js` に以下のコードを記述してください。
+
+```js
+var greeting = require('./sample_es5');
+
+console.log(greeting('World'));
+```
+
+`./src/index.js` から `./src/sample_es5.js` を読み込んでいることが分かります。これをWebpackでバンドルすると、`./dist/bundle.js` に以下のようなコードが出力されます。
+
+```js
+(()=>{var r,o={520:r=>{r.exports=function(r){return"Hello "+r}}},e={};r=function r(t){var n=e[t];if(void 0!==n)return n.exports;var s=e[t]={exports:{}};return o[t](s,s.exports,r),s.exports}(520),console.log(r("World"))})();
+```
 
 **[⬆ back to top](#構成)**
 
