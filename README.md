@@ -684,3 +684,5 @@ npx ts-node src/index_typescript.ts
 
 ## 参照
 - [Conventional Commits 1.0.0](https://www.conventionalcommits.org/ja/v1.0.0/)
+- [最新版で学ぶwebpack 5入門Babel 7でES2021環境の構築](https://ics.media/entry/16028/)
+- [最新版TypeScript+webpack 5の環境構築まとめ](https://ics.media/entry/16329/#)
