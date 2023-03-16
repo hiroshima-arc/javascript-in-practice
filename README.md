@@ -527,6 +527,69 @@ instance.greet(); // "Hello, John!"
 
 つまり、export defaultは、すぐに一つの値、クラス、オブジェクトをエクスポートする場合に使用することが多い一方で、exportは、複数の変数を一度に使用する場合や、 名前付きのエクスポートも行う場合に使用するため、プロジェクト内で必要に応じてexportとexport defaultの両方を使う場合があります。
 
+# TypeScript
+
+TypeScriptは、Microsoftが開発したオープンソースのプログラミング言語であり、JavaScriptと同じ文法と構造を持ちながらも、静的型付けをサポートする点が異なります。
+
+TypeScriptは、JavaScriptの拡張バージョンとして設計されており、JavaScriptコードと互換性があります。したがって、TypeScriptのコンパイルされたJavaScriptコードは、どんなブラウザや実行環境でも動作します。
+
+TypeScriptには次のような特徴があります。
+
+強い静的型付けによるタイプエラーの早期発見
+ECMAScript2015以降の仕様の利用が可能
+オブジェクト指向プログラミング向けの機能（クラス・インターフェース・ジェネリックス等）の提供
+ツール、フレームワーク、ライブラリの大規模なサポート
+TypeScriptは、npmパッケージマネージャーを使用してインストールし、Visual Studio CodeなどのIDEで開発することができます。
+
+# トランスパイルの実行
+
+@babel/preset-typescriptを使用してTypeScriptを変換する手順は以下の通りです。
+
+必要なパッケージをインストールします。
+BabelとTypeScriptのパッケージ、および@babel/preset-typescriptをインストールします。
+
+
+```
+npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/preset-typescript @babel/plugin-proposal-class-properties typescript
+```
+
+Babelの設定ファイル（.babelrcまたはbabel.config.js）に、@babel/preset-typescriptを追加します。
+.babelrcファイルが存在する場合：
+
+```json
+{
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-typescript"
+  ],
+  "plugins": ["@babel/plugin-proposal-class-properties"]
+}
+```
+
+babel.config.jsファイルを作成する場合：
+
+```js
+module.exports = {
+  presets: [
+    '@babel/preset-env',
+    '@babel/preset-typescript'
+  ],
+  plugins: ['@babel/plugin-proposal-class-properties']
+};
+```
+
+`./src/index.ts`ファイルを作成し、TypeScriptコードを記述します。
+
+```ts
+```
+
+TypeScriptファイルを変換します。
+
+```
+npx babel src --extensions '.ts,.tsx' --out-dir lib
+```
+
+これで、TypeScriptファイルが変換され、出力されたJavaScriptファイルにはES5コードが含まれるようになります。
 
 **[⬆ back to top](#構成)**
 
