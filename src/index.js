@@ -1,6 +1,6 @@
-var greeting = require('./sample_es5');
+import greeting from './sample_es5';
 console.log(greeting('ES5'));
 
-var greet = require('./sample_es6');
-var g = new greet.default('ES6');
+import Greeting from './sample_es6';
+const g = new Greeting('ES6');
 g.say();
