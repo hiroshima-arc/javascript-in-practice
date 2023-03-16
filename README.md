@@ -397,6 +397,137 @@ Hello ES5
 Hello ES6
 ```
 
+# CommonJSとES Modulesについて
+
+CommonJS と ES Modulesは、Node.jsやブラウザなどで使われる JavaScriptのモジュールシステムです。しかし、この二つは異なる構文と仕組みを持ち、互換性がありません。
+
+CommonJSは Node.js のデフォルトのモジュールシステムであり、 exports オブジェクトに値を追加することによって他のファイルからそれらの値を参照できます。そして、require() 関数を使い、外部のモジュールを読み込むことができます。
+
+一方、ES Modulesは ECMAScript6で導入され、 import 文と export 文 という新しいキーワードを使用しています。デフォルトではstrictモードが有効となり、外部の変数へのアクセス・変更を禁止します。またimport文内で相対パス等の解決方法も指定することができます。
+
+例えば、以下は CommonJS 形式で書かれた greet.js ファイルの例です。
+
+```js
+// greet.js - CommonJS
+const greet = (name) => {
+  console.log(`Hello, ${name}!`);
+};
+
+module.exports = greet;
+```
+
+exports オブジェクトに関数を登録しています。別のファイルでこれを使用するには require() 関数が必要です。
+
+```js
+// app.js - CommonJS
+const greet = require("./greet");
+
+greet("world"); // Hello, world!
+```
+
+次に、 ES Modules 形式で書かれた greet.js ファイルの例です。
+
+```js
+// greet.js - ES Modules
+const greet = (name) => {
+  console.log(`Hello, ${name}!`);
+};
+
+export default greet; // or `export const greet = ...` etc.
+```
+
+export default で関数を公開しています。別のファイルでこれを使用するには import 文が必要です。
+
+```js
+// app.js - ES Modules
+import greet from "./greet.js";
+
+greet("world"); // Hello, world!
+```
+
+ES Moduleは相対パスで指定しますが、拡張子は必要です。そして、ファイル名を省略した場合、index.js(index.mjs for module)が探索されます。
+
+`.src/index.js` をES Modules形式に変更します。
+
+```js
+import greeting from './sample_es5';
+console.log(greeting('ES5'));
+
+import Greeting from './sample_es6';
+const g = new Greeting('ES6');
+g.say();
+```
+
+正しく動作するか確認してみましょう。
+
+```
+npm run build
+node ./dist/bundle.js
+```
+
+exportとexport defaultの違いについて説明します。
+
+まず、共通して言えることは、両方のキーワードはES Modulesで使用されます。これにより、JavaScriptコードをモジュール化して、必要に応じて再利用できます。
+
+export： exportは、名前付きまたはデフォルトのエクスポート同様の役割を果たします。 ただし、最大の違いは、名前が付与されているかどうかです。
+
+名前つき
+
+```js
+// greeting.js
+export const message = "Hello World!";
+export function sayHello(name) {
+  console.log(`Hello ${name}!`);
+}
+```
+
+使用側の呼び出し
+
+```js
+import {message, sayHello} from 'greeting';
+```
+
+デフォルト
+
+```js
+// greeting.js
+export default class Greeting {
+  constructor() {
+    console.log("Hello, ES modules!");
+  }
+}
+```
+
+```js
+// import the default exported class
+import Greeting from 'greeting';
+let instance = new Greeting(); // “Hello, ES modules！”
+```
+
+export default: export defaultは、ES6の標準で初めて導入されたdefaultから始まるエクスポート文法であり、単一のモジュールでデフォルトのエクスポートを定義するために使用されます。デフォルトのエクスポートには、名前がつけられていません。
+
+```js
+// greeting.js
+export default class Greeting {
+  constructor(name) {
+    this.name = name;
+  }
+  greet() {
+    console.log(`Hello, ${this.name}!`);
+  }
+}
+```
+
+```js
+ // Import the default exported class
+import Greeting from 'greeting';
+let instance = new Greeting('John');
+instance.greet(); // "Hello, John!"
+```
+
+つまり、export defaultは、すぐに一つの値、クラス、オブジェクトをエクスポートする場合に使用することが多い一方で、exportは、複数の変数を一度に使用する場合や、 名前付きのエクスポートも行う場合に使用するため、プロジェクト内で必要に応じてexportとexport defaultの両方を使う場合があります。
+
+
 **[⬆ back to top](#構成)**
 
 ### 配置
