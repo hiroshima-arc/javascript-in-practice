@@ -318,6 +318,85 @@ console.log(greeting('World'));
 (()=>{var r,o={520:r=>{r.exports=function(r){return"Hello "+r}}},e={};r=function r(t){var n=e[t];if(void 0!==n)return n.exports;var s=e[t]={exports:{}};return o[t](s,s.exports,r),s.exports}(520),console.log(r("World"))})();
 ```
 
+# モジュールバンドラの設定
+
+現状ではES6のコードをそのまま出力しています。ES5に変換するためには、babel-loaderを使用します。
+パッケージをインストールしてwebpack.config.js に以下のコードを変更してください。
+
+```
+npm install --save-dev babel-loader
+```
+
+```js
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    path: __dirname + '/dist',
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [
+                "@babel/preset-env",
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+  // ES5(IE11等)向けの指定
+  target: ["web", "es5"],
+};
+```
+
+`./src/index.js` に以下のコードを変更してください。
+
+```js
+var greeting = require('./sample_es5');
+console.log(greeting('ES5'));
+
+var greet = require('./sample_es6');
+var g = new greet.default('ES6');
+g.say();
+```
+
+`./src/sample_es6.js` を作成します。
+
+```js
+class Greeting {
+  constructor(name) {
+    this.name = name;
+  }
+  say() {
+    console.log(`Hello ${this.name}`);
+  }
+}
+
+export default Greeting;
+```
+
+モジュールバンドルとトランスパイルが実行して、`./dist/bundle.js` を実行してみましょう。
+
+```
+npm run build
+node ./dist/bundle.js
+```
+
+以下のように出力されれば成功です。
+
+```
+Hello ES5
+Hello ES6
+```
+
 **[⬆ back to top](#構成)**
 
 ### 配置
