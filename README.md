@@ -870,7 +870,26 @@ routes/index.js: アプリケーションのルーティングを管理するフ
 開発パッケージのセットアップ
 
 ```
-npm install --save-dev marked@1.2.2
+npm install --save-dev marked@1.2.2 foreman
+```
+
+Procfileを作成する
+
+```
+app: npm app
+watch: npm run watch
+```
+
+npmタスクを更新する
+
+```
+  "scripts": {
+    "start": "nf start -j Procfile",
+    "app": "webpack server --config ./webpack.config.js --open",
+    "test": "jest --coverage",
+    "watch": "webpack --watch --config webpack.config.js",
+    "build": "webpack"
+  },
 ```
 
 **[⬆ back to top](#構成)**
