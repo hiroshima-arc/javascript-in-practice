@@ -1,2 +1,5 @@
-import { sum } from './app.js';
-console.log(sum(1, 2));
+import { App } from './app.js';
+const app = new App();
+
+import { setUp } from './dev.js';
+setUp();

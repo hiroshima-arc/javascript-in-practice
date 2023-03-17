@@ -1,2 +1,5 @@
-import { sum } from './app';
-console.log(sum(1, 2));
+import { App } from './app';
+const app = new App();
+
+const dev = require('./dev');
+dev.setUp();
