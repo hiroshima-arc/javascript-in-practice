@@ -668,6 +668,107 @@ npm install --save-dev ts-node
 npx ts-node src/index_typescript.ts
 ```
 
+# 開発環境の構築
+
+Webpack-dev-serverは、開発者がフロントエンドの開発に集中することを可能にするツールであり、「ライブリロード」（Live Reloading）や「ホットリロード」（Hot Reloading）などの機能を提供します。
+
+```
+npm install webpack-dev-server --save-dev
+```
+
+上記のコードブロックは、npmを使用してwebpack-dev-serverをインストールする方法を示しています。「--save-dev」は、依存関係を追加するためのものであり、開発時に必要なパッケージの情報を含めてpackage.jsonファイルに保存します。
+
+設定
+次に、webpack.config.jsファイルに次のような設定を追加します：
+
+```js
+const path = require('path');
+
+module.exports = {
+  //...
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
+    port: 9000,
+  },
+};
+```
+
+上記のコードは、Webpack-dev-serverの設定内容を示しています。contentBaseはサーバーから配信されるコンテンツを指定するためのものであり、例えばJavaScriptやCSSなどの静的ファイルを含めることができます。compressは、圧縮オプションを有効化するためのものであり、portは使用するポート番号を指定するためのものです。
+
+実行
+最後に、以下のコマンドを実行して、アプリケーションを起動します：
+
+```
+npx webpack serve
+```
+
+これにより、Webpack-dev-serverが起動し、開発用サーバーが立ち上がります。起動後には、指定したポート番号でWebアプリケーションを表示することができます。
+
+Webpack-dev-serverを使用することで、開発時にローカルサーバーを立ち上げ、ファイルの変更をリアルタイムに反映させることができます。また、このコードでは、HTMLWebpackPluginプラグインを使用してjsファイルに自動的にバンドルされたscriptタグを生成し、index.htmlに挿入することができます。
+
+具体的には、webpack.config.jsの設定ファイルでhtml-webpack-pluginを次のように設定します：
+
+```
+npm install  html-webpack-plugin --save-dev
+```
+
+```js
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  // ...他のWebpack設定
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'src/index.html' // インデックステンプレートを指定
+    })
+  ]
+};
+```
+
+これにより、自動的にオプションで指定したテンプレート（src/index.html）をベースとして生成されたHTMLファイルが、Webpack-dev-serverが起動するローカルサーバーのルートディレクトリに保存されます。このHTMLファイルには、自動的にビルドされたJavaScriptバンドルファイルへのscriptタグが追加されます。
+
+この方法を使用することで、現在の開発環境を維持しながら、開発者は自動生成されたHTMLファイルを更新しなくても、変更後即座に反映がされるバンドルされたJavaScriptファイルを実行できます。
+
+npmタスクに追加します。
+
+```js
+"scripts": {
+    "build": "webpack",
+    "start": "webpack server --config ./webpack.config.js --open",
+},
+```
+
+ソースマップを有効化して、デバッグしやすくします。あわせて環境変数を設定して、開発環境と本番環境でソースマップの有効化を切り替えます。
+
+
+```js
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const env = process.env.NODE_ENV || "development";
+const isDevelopment = env === "development";
+
+module.exports = {
+  mode: env,
+  target: ["web", "es5"],
+  devtool: isDevelopment ? "source-map" : false,
+```
+
+TypeScriptでソースマップを有効化するには、tsconfig.jsonに以下の設定を追加します。
+
+```js
+{
+  "compilerOptions": {
+    "sourceMap": true
+  }
+}
+```
+
+
 **[⬆ back to top](#構成)**
 
 ### 配置

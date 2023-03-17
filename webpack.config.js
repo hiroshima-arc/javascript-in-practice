@@ -1,5 +1,20 @@
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const env = process.env.NODE_ENV || "development";
+const isDevelopment = env === "development";
+
 module.exports = {
-  mode: 'development',
+  mode: env,
+  target: ["web", "es5"],
+  devtool: isDevelopment ? "source-map" : false,
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
+    compress: true,
+    port: 9000,
+  },
   entry: './src/index_typescript.ts',
   output: {
     path: __dirname + '/dist',
@@ -29,5 +44,9 @@ module.exports = {
       }
     ],
   },
-  target: ["web", "es5"],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'src/index.html' // インデックステンプレートを指定
+    })
+  ]
 };
