@@ -15,7 +15,7 @@ module.exports = {
     compress: true,
     port: 9000,
   },
-  entry: './src/index.js',
+  entry: './index.ts',
   output: {
     path: __dirname + '/dist',
     filename: 'bundle.js'
@@ -46,7 +46,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html' // インデックステンプレートを指定
+      template: './index.html'
     })
   ]
 };
