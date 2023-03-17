@@ -670,6 +670,8 @@ npx ts-node src/index_typescript.ts
 
 # 開発環境の構築
 
+## webpack-dev-serverのセットアップ
+
 Webpack-dev-serverは、開発者がフロントエンドの開発に集中することを可能にするツールであり、「ライブリロード」（Live Reloading）や「ホットリロード」（Hot Reloading）などの機能を提供します。
 
 ```
@@ -765,6 +767,56 @@ TypeScriptでソースマップを有効化するには、tsconfig.jsonに以下
   "compilerOptions": {
     "sourceMap": true
   }
+}
+```
+
+## テスティングフレームワークのセットアップ
+
+jestとは
+JestはFacebookによって開発され、JavaScriptのテストフレームワークです。Jestの主な目的は、JavaScriptプロジェクトで単体テストもしくは統合テストを効率的かつ簡単に実行することです。
+
+Jestは、mochaやjasmineなどの他のJavaScript用のテストフレームワークよりも、より高速かつシンプルで、開発者がテストを書きやすくなるように設計されています。また、JestはReactアプリケーションのテストに特化しているためReactのSnapshot Testing機能を利用したUIコンポーネントのテストに使われることが多くあります。
+
+jestのセットアップ
+以下の手順に従ってjestをインストールして初期設定を行います。
+
+Jestパッケージのインストール
+
+ターミナルでプロジェクトのルートディレクトリに移動した上で、下記コマンドを実行します。
+
+```
+npm install --save-dev jest
+```
+
+package.jsonファイルの更新
+
+package.jsonファイル内でscriptsオブジェクトの配下にテスト用のコマンドを追加します。
+
+```js
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack server --config ./webpack.config.js --open",
+    "test": "jest --coverage"
+  },
+```
+
+テストの作成
+
+「__tests__」という名前のディレクトリまたは「*.test.js」または「*.spec.js」という接尾辞を持つJavaScriptファイルとしてテストスクリプトを作成します。
+
+テストの実行
+
+その上で下記コマンドを実行することでテストの実行が行えます。
+
+```
+npm test
+```
+ES Modulesを私用している場合はテストが失敗するので以下の設定を追加する
+
+package.jsonの設定
+
+```js
+  "type": "module"
 }
 ```
 
