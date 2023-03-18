@@ -965,6 +965,28 @@ Herokuのダッシュボードから新しいアプリケーションを作成�
 $ heroku create jip-episode0
 ```
 
+HTTPサーバーをインストールする
+
+```
+npm install http-server
+```
+
+ProcfileをProcfile.devに変更して新たにProcfileを作成します。
+
+```
+web: npx http-server -p $PORT
+```
+
+package.jsonのscriptsに以下のように記述します。
+
+```
+"scripts": {
+  ...
+  "heroku-postbuild": "webpack --config ./webpack.config.js --progress"
+  ...
+},
+```
+
 アプリ名を指定してコマンドを実行すると、新しいアプリケーションとgitリポジトリが作成されます。(空のリポジトリが作成されます)
 
 ** Step 4: アプリケーションのデプロイ **
@@ -996,11 +1018,6 @@ $ heroku ps:scale web=1
 これで、アプリケーションが正常に起動するはずです。
 
 以上で、Herokuにアプリケーションをデプロイする手順の簡単な紹介を終わります。
-
-```
-npm install http-server
-```
-
 
 **[⬆ back to top](#構成)**
 
