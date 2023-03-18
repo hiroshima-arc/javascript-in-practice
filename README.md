@@ -1023,6 +1023,48 @@ $ heroku ps:scale web=1
 
 ### 運用
 
+開発中のWebアプリケーションを構築するために使用するモジュール群です。以下でそれぞれの役割を説明します。
+
+npm-run-all: 複数のnpm scriptコマンドを同時に実行したり、シーケンシャルに実行したりすることができるパッケージです。
+cpx: ファイルのコピーを簡単に実行することができるツールです。
+rimraf: ファイルやディレクトリを削除するためのパッケージです。通常、rm -rfの代替手段として使用されます。
+これらのツールを使用することで、エラーハンドリングやファイル操作などを簡単に処理することができます。特に、npm run scriptにおいて便利な機能を提供します。
+
+```
+npm install --save-dev npm-run-all cpx rimraf
+```
+
+GulpはJavaScriptのタスクランナーで、自動化されたビルドプロセスを作成することができます。
+
+Gulpを使用すると、SassまたはLessファイルをコンパイルし、画像を最適化したり、JavaScriptを圧縮したりするなど、いくつかのタスクを自動化できます。
+
+以下はGulpを使用する基本的な手順です：
+
+Node.jsをインストールします。
+ターミナルで、プロジェクトフォルダに移動して npm init を実行して、 package.json ファイルを作成します。
+Gulpをグローバルインストールします： npm install --global gulp-cli
+npm install --save-dev gulp でgulpを開発環境に追加します。
+プロジェクトフォルダに gulpfile.js ファイルを作成します。ここに、必要なモジュールをロードするコードと、各タスクを定義するコードを書きます。
+例えば、CSSファイルをコンパイルするタスクを以下のように定義することができます：
+
+```
+const gulp = require('gulp');
+const sass = require('gulp-sass');
+
+gulp.task('sass', function () {
+  return gulp.src('./sass/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./css'));
+});
+
+gulp.task('watch', function () {
+  gulp.watch('./sass/**/*.scss', ['sass']);
+});
+```
+
+ターミナルで、 gulp タスク名 を入力して、タスクを実行します。例えば、上記のタスクを実行するには、 gulp sass と入力します。
+これでGulpを使用して、独自のタスクを作成し、シンプルでエレガントなビルドプロセスを実現できます。
+
 **[⬆ back to top](#構成)**
 
 ### 開発
