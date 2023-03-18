@@ -29,7 +29,8 @@
     "test": "jest --coverage",
     "watch:app": "webpack --watch --config webpack.config.js",
     "watch:test": "jest --watch",
-    "build": "webpack"
+    "build": "webpack",
+    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress"
   },
   "repository": {
     "type": "git",
