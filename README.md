@@ -1002,7 +1002,7 @@ $ git commit -m "initial commit"
 次に、以下のコマンドを実行して、Herokuにアプリケーションをデプロイします。
 
 ```
-$ git push heroku wip/episode/00
+$ git push heroku wip/episode/00:master
 ```
 
 これで、コードがHeroku上にデプロイされます。Herokuはデプロイ時に自動的に依存関係を解決してくれるため、ビルドやセットアップに必要な手順を自分で書く必要はありません。ただし、必要なファイルに対して適切にProcfileを追加する必要があります。
