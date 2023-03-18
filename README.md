@@ -1,5 +1,8 @@
 # 実践 JavaScript
 
+[![Node.js CI](https://github.com/hiroshima-arc/javascript-in-practice
+/actions/workflows/node.js.yml/badge.svg)](https://github.com/hiroshima-arc/javascript-in-practice/actions/workflows/node.js.yml)
+
 ## 概要
 
 JavaScriptはウェブ開発のための言語で、ECMAScriptはJavaScriptの仕様であり、バージョンアップによって新機能が追加されています。Node.jsはJavaScriptをサーバーサイドで実行するためのプログラムであり、npmと呼ばれるパッケージマネージャーを備えています。ES5とES6はJavaScriptのバージョンであり、ES6は構文や新機能の追加があり、Babelを使用することでES5に変換することができます。
