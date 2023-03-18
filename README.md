@@ -997,6 +997,10 @@ $ heroku ps:scale web=1
 
 以上で、Herokuにアプリケーションをデプロイする手順の簡単な紹介を終わります。
 
+```
+npm install http-server
+```
+
 
 **[⬆ back to top](#構成)**
 

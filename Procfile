@@ -1,1 +1,1 @@
-web: npx webpack-dev-server --port $PORT
+web: npx http-server -p $PORT
