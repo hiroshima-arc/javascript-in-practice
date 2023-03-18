@@ -17,7 +17,7 @@ module.exports = {
   },
   entry: './index.ts',
   output: {
-    path: __dirname + '/dist',
+    path: __dirname + '/public',
     filename: 'bundle.js'
   },
   resolve: {
