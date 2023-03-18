@@ -30,7 +30,7 @@
     "watch:app": "webpack --watch --config webpack.config.js",
     "watch:test": "jest --watch",
     "build": "webpack",
-    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress"
+    "heroku-postbuild": "webpack --config ./webpack.config.js --progress"
   },
   "repository": {
     "type": "git",
