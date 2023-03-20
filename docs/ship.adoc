@@ -6,73 +6,106 @@
 
 # 配置
 
-Vercelとは
-Vercel（ヴァーセル）は、静的サイトのホスティング (デプロイ) から API の構築やデプロイまでのフルスタックサービスです。Vercelを使用すると、Next.js / React.js アプリを素早く簡単にデプロイすることができます。また、Vercelは、CDNを介して世界中のユーザーにアクセスするための安定した高速なパフォーマンスを提供します。
+## システムアーキテクチャ
 
-Vercelにデプロイする手順
-Vercelのサインアップ
-Vercel.comにアクセスし、新規登録・ログインします。
-プロジェクトの作成
-「New Project」ボタンを押下すると、GitHubやGitLab、BitbucketなどのVCS（バージョン管理システム）に接続可能、もしくは直接zipファイルをアップロードすることもできます。
-リポジトリの選択
-デプロイするリポジトリを選択します。自分のリポジトリが無ければ、Create a new repositoryをクリックして、新しいリポジトリを作成することもできます。
-ビルドコマンドの入力
-プロジェクトのファイル構造に合わせて、Vercelが正しいビルドコマンドを判断する場合もありますが、設定をカスタマイズする場合は、Build Command欄に npm run build または yarn build などの適切なビルドスクリプトを記述します。
-環境変数の設定(必要な場合)
-環境変数を使って、APIキーなどの隠された機密情報を取り扱うことができます。これらの値を保護することで、悪意ある攻撃からのアプリケーションを保護することができます。
-デプロイするブランチの選択
-プロジェクトのどのブランチをデプロイするのか選択します。
-デプロイの開始
-上記設定がすべて完了したら、「Deploy」ボタンをクリックして、デプロイを開始します。
-デプロイの確認
-デプロイが完了すると、VercelのダッシュボードでプレビューURLが表示されます。これをクリックするとデプロイ結果を確認することができます。また、このURLを共有して他の人とテストすることもできます。
+[plantuml]
+----
+@startuml
+actor 開発者
+actor 利用者
 
-VercelにCLIでデプロイする手順
-Vercel CLIをインストールします。次のコマンドを実行してください。(事前にNode.jsがインストールされている必要があります)。
+cloud "Vercel" as vercel {
+    package "Production Environment" as ui_prd_env {
+      [UI] as ui_prd
+    }
+}
 
-```
-npm install -g vercel
-```
+cloud "Heroku" as heroku {
+    package "Production Environment" as api_prd_env {
+      [API] as api_prd
+      [DB] as db_prd
+    }
+}
 
-webpack.config.jsのビルドファイルの出力先をpublicに変更します。
+cloud "GitHub" as github {
+  package "Repository" as repository {
+    [Git] as git
+  }
 
-```
-  output: {
-    path: __dirname + '/public',
-    filename: 'bundle.js'
-  },
-```
+  package "Continuous Integration" as ci {
+    [GiHubAction] as github_action
+  }
+}
 
-最後に以下のコマンドを実行してデプロイします。
+開発者 --> repository
+repository --> heroku
+repository --> vercel
+api_prd -> db_prd
+api_prd <-- ui_prd
+git -> github_action
+ui_prd <-- 利用者
+@enduml
+----
 
-```
-vercel deploy
-```
+これは、ソフトウェア開発と展開の高レベルの概要を示すUMLダイアグラムです。開発者、本番環境、およびリポジトリの3つの主要なコンポーネントが示されています。
 
-vercel.jsonファイルを編集することで、デプロイ時に様々な設定ができます。
+開発者はアクターによって表され、利用者のアクターもあり、ダイアグラム上では「利用者」と表記されています。
 
+本番環境には、Webアプリケーションを展開するためのプラットフォームであるVercelとHerokuの2つのクラウドがあります。本番環境は、「Production Environment」のUIのためにUIコンポーネントのみを含むパッケージと、「Production Environment」のAPIとデータベースを含むパッケージの2つに分かれています。
 
-Herokuとは
+リポジトリは、Gitバージョン管理システム「Git Hub」と継続的インテグレーションシステムの「GitHub Action」という2つのパッケージを含むGitHubクラウドで表されています。
+
+このダイアグラムは、開発者がコードをリポジトリにプッシュすることで、GitHub Actionを使用した継続的インテグレーションプロセスがトリガーされることを示しています。継続的インテグレーションプロセスは、コードをビルドしてテストし、VercelとHerokuの本番環境の両方に展開します。
+
+最終的に、利用者はVercelのUIコンポーネントを介してアプリケーションとやり取りし、Herokuの本番環境のAPIとデータベースコンポーネントと通信します。
+
+## GitHubとは
+
+GitHubは、ソースコードを管理するためのWebサービスです。GitHub上でソースコードを管理することで、コードのバージョン管理や、コードの共有、コードのレビューなどを行うことができます。
+
+## GitHub Actionsとは
+
+GitHub Actionsは、GitHub上で動作するCI/CDツールです。GitHub上でコードを管理している場合、GitHub Actionsを使用することで、GitHub上でコードのビルド、テスト、デプロイなどの自動化を行うことができます。
+
+### GitHub Actionsのセットアップ
+
+以下は、GitHub Actionsをセットアップする手順です。
+
+1. リポジトリに移動して、[Actions]タブを開きます。
+
+2. 最初のワークフローをセットアップする場合は、「New workflow」ボタンをクリックします。空の編集画面が表示されます。
+
+3. 使用可能なテンプレートやサンプルについてさまざまなオプションがあります。自分で完全なカスタムワークフローを作成したい場合は、「Set up a workflow yourself」ボタンをクリックします。
+
+4. GitHub Actions中で使用されるYAML形式記述法を用い、自分でJOBとStepを設定していきます。
+
+5. 保存してからコミットして、ワークフローを有効化します。
+
+以上が、簡単なGitHub Actionsのセットアップ手順です。
+
+## Herokuとは
+
 Herokuは、クラウド上にアプリケーションをデプロイするためのPaaS（Platform as a Service）です。Herokuでは、開発者が手間をかけずにアプリケーションの構築、実行、スケールすることができます。
 
-Herokuにアプリをデプロイする手順
+### Herokuにアプリをデプロイする手順
+
 以下は一般的なHerokuアプリケーションのデプロイ手順です:
 
-Step 1: Heroku アカウントの作成
+#### Heroku アカウントの作成
 
 最初に、Heroku 公式サイト から無料アカウントを作成してください。
 
-Step 2: Heroku CLI のインストール
+#### Heroku CLI のインストール
 
 Heroku CLI（Command Line Interface）を使用して、アプリケーションをHerokuにデプロイします。
 CLIのインストール手順は、このページ からご確認ください。
 
-** Step 3: Heroku アプリケーションの作成**
+#### Heroku アプリケーションの作成
 
 Herokuのダッシュボードから新しいアプリケーションを作成することもできますが、CLIで作成することもできます。
 
 ```
-$ heroku create jip-episode0
+heroku create jip-episode0
 ```
 
 HTTPサーバーをインストールする
@@ -99,30 +132,30 @@ package.jsonのscriptsに以下のように記述します。
 
 アプリ名を指定してコマンドを実行すると、新しいアプリケーションとgitリポジトリが作成されます。(空のリポジトリが作成されます)
 
-** Step 4: アプリケーションのデプロイ **
+#### アプリケーションのデプロイ
 
 最初に、アプリケーションをHerokuにデプロイするためにgitを設定します。
 
 ```
-$ git init
-$ git add .
-$ git commit -m "initial commit"
+git init
+git add .
+git commit -m "initial commit"
 ```
 
 次に、以下のコマンドを実行して、Herokuにアプリケーションをデプロイします。
 
 ```
-$ git push heroku wip/episode/00:master
+git push heroku wip/episode/00:master
 ```
 
 これで、コードがHeroku上にデプロイされます。Herokuはデプロイ時に自動的に依存関係を解決してくれるため、ビルドやセットアップに必要な手順を自分で書く必要はありません。ただし、必要なファイルに対して適切にProcfileを追加する必要があります。
 
-** Step 5: アプリケーションの起動 **
+#### アプリケーションの起動
 
 アプリケーションが正常にデプロイされたら、以下のコマンドを使ってアプリケーションを起動します。
 
 ```
-$ heroku ps:scale web=1
+heroku ps:scale web=1
 ```
 
 これで、アプリケーションが正常に起動するはずです。
@@ -131,12 +164,63 @@ $ heroku ps:scale web=1
 
 GitHub ActionsはCI/CDの実行に使用されるワークフローを自動化するプラットフォームです。
 
-以下は、GitHub Actionsをセットアップする手順です。
+## Vercelとは
 
-1.リポジトリに移動して、[Actions]タブを開きます。
-2.最初のワークフローをセットアップする場合は、「New workflow」ボタンをクリックします。空の編集画面が表示されます。
-3.使用可能なテンプレートやサンプルについてさまざまなオプションがあります。自分で完全なカスタムワークフローを作成したい場合は、「Set up a workflow yourself」ボタンをクリックします。
-4. GitHub Actions中で使用されるYAML形式記述法を用い、自分でJOBとStepを設定していきます。
-5. 保存してからコミットして、ワークフローを有効化します。
+Vercel（ヴァーセル）は、静的サイトのホスティング (デプロイ) から API の構築やデプロイまでのフルスタックサービスです。Vercelを使用すると、Next.js / React.js アプリを素早く簡単にデプロイすることができます。また、Vercelは、CDNを介して世界中のユーザーにアクセスするための安定した高速なパフォーマンスを提供します。
 
-以上が、簡単なGitHub Actionsのセットアップ手順です。
+### Vercelにデプロイする手順
+
+#### Vercelのサインアップ
+
+Vercel.comにアクセスし、新規登録・ログインします。
+プロジェクトの作成
+「New Project」ボタンを押下すると、GitHubやGitLab、BitbucketなどのVCS（バージョン管理システム）に接続可能、もしくは直接zipファイルをアップロードすることもできます。
+リポジトリの選択
+
+デプロイするリポジトリを選択します。自分のリポジトリが無ければ、Create a new repositoryをクリックして、新しいリポジトリを作成することもできます。
+
+#### ビルドコマンドの入力
+
+プロジェクトのファイル構造に合わせて、Vercelが正しいビルドコマンドを判断する場合もありますが、設定をカスタマイズする場合は、Build Command欄に npm run build または yarn build などの適切なビルドスクリプトを記述します。
+
+#### 環境変数の設定(必要な場合)
+
+環境変数を使って、APIキーなどの隠された機密情報を取り扱うことができます。これらの値を保護することで、悪意ある攻撃からのアプリケーションを保護することができます。
+
+#### デプロイするブランチの選択
+
+プロジェクトのどのブランチをデプロイするのか選択します。
+
+#### デプロイの開始
+
+上記設定がすべて完了したら、「Deploy」ボタンをクリックして、デプロイを開始します。
+
+#### デプロイの確認
+
+デプロイが完了すると、VercelのダッシュボードでプレビューURLが表示されます。これをクリックするとデプロイ結果を確認することができます。また、このURLを共有して他の人とテストすることもできます。
+
+### VercelにCLIでデプロイする手順
+
+Vercel CLIをインストールします。次のコマンドを実行してください。(事前にNode.jsがインストールされている必要があります)。
+
+```
+npm install -g vercel
+```
+
+webpack.config.jsのビルドファイルの出力先をpublicに変更します。
+
+```
+  output: {
+    path: __dirname + '/public',
+    filename: 'bundle.js'
+  },
+```
+
+最後に以下のコマンドを実行してデプロイします。
+
+```
+vercel deploy
+```
+
+vercel.jsonファイルを編集することで、デプロイ時に様々な設定ができます。
+
