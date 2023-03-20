@@ -31,8 +31,7 @@
     "webpack-dev-server": "^4.12.0"
   },
   "scripts": {
-    "start": "nf start -j Procfile.dev",
-    "app": "webpack server --config ./webpack.config.js --open",
+    "start": "gulp",
     "test": "gulp test",
     "watch": "gulp watch",
     "build": "gulp build",
