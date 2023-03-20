@@ -262,7 +262,7 @@ var Person = /*#__PURE__*/function () {
 
 代表的なモジュールバンドラーには webpack, Parcel, Rollup などがあります。使い勝手や特徴が微妙に異なりますので、プロジェクトの目的にあわせて選定することが重要です。
 
-### モジュールバンドラのセットアップ
+### モジュールバンドラーのセットアップ
 
 webpackのセットアップには以下の手順があります。
 
@@ -291,7 +291,7 @@ module.exports = {
 
 以上の手順を経て、Webpackがセットアップされました。開発時にはnpm scriptsを使用してWebpackを実行することをおすすめします。
 
-### モジュールバンドラの実行
+### モジュールバンドラーの実行
 
 npm scriptsを使用してWebpackを実行することをおすすめします。
 
@@ -329,7 +329,7 @@ console.log(greeting('World'));
 (()=>{var r,o={520:r=>{r.exports=function(r){return"Hello "+r}}},e={};r=function r(t){var n=e[t];if(void 0!==n)return n.exports;var s=e[t]={exports:{}};return o[t](s,s.exports,r),s.exports}(520),console.log(r("World"))})();
 ```
 
-### モジュールバンドラの設定
+### モジュールバンドラーの設定
 
 現状ではES6のコードをそのまま出力しています。ES5に変換するためには、babel-loaderを使用します。
 パッケージをインストールしてwebpack.config.js に以下のコードを変更してください。
