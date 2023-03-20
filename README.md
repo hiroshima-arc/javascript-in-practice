@@ -1,7 +1,8 @@
 # 実践 JavaScript
 
-[![Node.js CI](https://github.com/hiroshima-arc/javascript-in-practice
-/actions/workflows/node.js.yml/badge.svg)](https://github.com/hiroshima-arc/javascript-in-practice/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/hiroshima-arc/javascript-in-practice/actions/workflows/node.js.yml/badge.svg)](https://github.com/hiroshima-arc/javascript-in-practice/actions/workflows/node.js.yml)
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/hiroshima-arc/javascript-in-practice)
 
 ## 概要
 
@@ -28,6 +29,11 @@ JavaScriptはウェブ開発のための言語で、ECMAScriptはJavaScriptの�
 ## 詳細
 
 ### Quick Start
+
+```
+npm install
+npm star
+```
 
 ### 構築
 

@@ -84,7 +84,7 @@ const webpack = {
       open: false,
     });
     const server = new WebpackDevServer(compiler, devServerOptions);
-    server.listen(devServerOptions.port, devServerOptions.host, () => {
+    server.start(devServerOptions.port, devServerOptions.host, () => {
       console.log("Starting server on http://localhost:8080");
     });
     cb();
@@ -105,11 +105,11 @@ const jest = {
 }
 
 exports.default = series(
+  webpack.clean,
+  webpack.build,
+  asciidoctor.clean,
+  asciidoctor.build,
   series(
-    webpack.clean,
-    webpack.build,
-    asciidoctor.clean,
-    asciidoctor.build,
     parallel(
       webpack.server,
       asciidoctor.server
@@ -119,7 +119,7 @@ exports.default = series(
       asciidoctor.watch,
       jest.watch
     )
-  ),
+  )
 );
 exports.build = series(
   webpack.clean,
