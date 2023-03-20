@@ -34,5 +34,23 @@ const asciidoctor = {
     cb();
   }
 }
-
 exports.docs = series(asciidoctor.clean, asciidoctor.build);
+
+const webpack = {
+  clean: async (cb) => {
+    await rimraf("./public");
+    cb();
+  },
+
+  build: (cb) => {
+    const webpack = require("webpack");
+    const webpackConfig = require("./webpack.config.js");
+    webpack(webpackConfig, (err, stats) => {
+      if (err || stats.hasErrors()) {
+        console.error(err);
+      }
+      cb();
+    });
+  }
+}
+exports.build = series(webpack.clean, webpack.build, asciidoctor.clean, asciidoctor.build);
