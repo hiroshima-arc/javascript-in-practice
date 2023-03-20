@@ -1080,6 +1080,94 @@ gulp.task('watch', function () {
 ターミナルで、 gulp タスク名 を入力して、タスクを実行します。例えば、上記のタスクを実行するには、 gulp sass と入力します。
 これでGulpを使用して、独自のタスクを作成し、シンプルでエレガントなビルドプロセスを実現できます。
 
+Assciidoctorは、Rubyで書かれたドキュメント変換ツールです。Markdownとは異なり、Asciidoctorは、ドキュメントの構造を表すために、マークアップ言語を使用します。
+
+```
+npm install --save-dev asciidoctor asciidoctor-kroki
+```
+
+`docs`ディレクトリに`index.adoc`ファイルを作成し、以下の内容を記述します。
+
+```asciidoc
+:toc: left
+:toclevels: 5
+:sectnums:
+
+= Asciidoc
+
+== 目的
+
+== 前提
+
+
+== 構成
+* <<anchor-1,サンプル>>
+
+== 詳細
+=== link:./sample.html[サンプル^][[anchor-1]]
+
+== 参照
+```
+
+gulpタスクを作成します。
+
+```js
+const { series } = require("gulp");
+const { default: rimraf } = require("rimraf");
+
+const asciidoctor = {
+  clean: async (cb) => {
+    await rimraf("./public/docs");
+    cb();
+  },
+  build: (cb) => {
+    const fs = require("fs");
+    const asciidoctor = require("@asciidoctor/core")();
+    const kroki = require("asciidoctor-kroki");
+
+    const krokiRegister = () => {
+      const registry = asciidoctor.Extensions.create();
+      kroki.register(registry);
+      return registry;
+    };
+
+    const inputRootDir = "./docs";
+    const outputRootDir = "./public/docs";
+    const fileNameList = fs.readdirSync(inputRootDir);
+    const docs = fileNameList.filter(RegExp.prototype.test, /.*\.adoc$/);
+
+    docs.map((input) => {
+      const file = `${inputRootDir}/${input}`;
+      asciidoctor.convertFile(file, {
+        safe: "safe",
+        extension_registry: krokiRegister(),
+        to_dir: outputRootDir,
+        mkdirs: true,
+      });
+    });
+    cb();
+  }
+}
+
+exports.docs = series(asciidoctor.clean, asciidoctor.build);
+```
+
+gulpタスクを実行します。
+
+```
+gulp docs
+```
+
+npmタスクに追加します。
+
+```json
+{
+  "scripts": {
+    "docs": "gulp docs"
+  }
+}
+```
+
 **[⬆ back to top](#構成)**
 
 ### 開発
