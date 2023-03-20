@@ -1168,6 +1168,10 @@ npmタスクに追加します。
 }
 ```
 
+```
+npm install --save-dev browser-sync
+```
+
 **[⬆ back to top](#構成)**
 
 ### 開発

@@ -1,5 +1,6 @@
 const { series, parallel, watch } = require("gulp");
 const { default: rimraf } = require("rimraf");
+const browserSync = require('browser-sync').create();
 
 const asciidoctor = {
   clean: async (cb) => {
@@ -36,7 +37,16 @@ const asciidoctor = {
   watch: (cb) => {
     watch("./docs/**/*.adoc", asciidoctor.build);
     cb();
-  }
+  },
+  server: (cb) => {
+    browserSync.init({
+      server: {
+        baseDir: "./public",
+      },
+    });
+    watch("./public/**/*.html").on("change", browserSync.reload);
+    cb();
+  },
 }
 
 const webpack = {
@@ -65,6 +75,20 @@ const webpack = {
     });
     cb();
   },
+  server: (cb) => {
+    const webpack = require("webpack");
+    const webpackConfig = require("./webpack.config.js");
+    const compiler = webpack(webpackConfig);
+    const WebpackDevServer = require("webpack-dev-server");
+    const devServerOptions = Object.assign({}, webpackConfig.devServer, {
+      open: false,
+    });
+    const server = new WebpackDevServer(compiler, devServerOptions);
+    server.listen(devServerOptions.port, devServerOptions.host, () => {
+      console.log("Starting server on http://localhost:8080");
+    });
+    cb();
+  },
 }
 
 const jest = {
@@ -77,10 +101,43 @@ const jest = {
     const jest = require("jest");
     jest.run(["--watch"]);
     cb();
-  }
+  },
 }
 
-exports.build = series(webpack.clean, webpack.build, asciidoctor.clean, asciidoctor.build);
+exports.default = series(
+  series(
+    webpack.clean,
+    webpack.build,
+    asciidoctor.clean,
+    asciidoctor.build,
+    parallel(
+      webpack.server,
+      asciidoctor.server
+    ),
+    parallel(
+      webpack.watch,
+      asciidoctor.watch,
+      jest.watch
+    )
+  ),
+);
+exports.build = series(
+  webpack.clean,
+  webpack.build,
+  asciidoctor.clean,
+  asciidoctor.build
+);
 exports.test = series(jest.test);
-exports.docs = series(asciidoctor.clean, asciidoctor.build);
-exports.watch = parallel(webpack.watch, asciidoctor.watch, jest.watch);
+exports.docs = series(
+  asciidoctor.clean,
+  asciidoctor.build,
+  parallel(
+    asciidoctor.server,
+    asciidoctor.watch
+  )
+);
+exports.watch = parallel(
+  webpack.watch,
+  asciidoctor.watch,
+  jest.watch
+);
