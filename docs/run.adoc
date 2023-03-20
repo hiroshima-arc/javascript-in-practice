@@ -6,29 +6,44 @@
 
 # 運用
 
+## NPMスクリプトとは
+
+npmスクリプトは、package.jsonファイルに記述された、npmコマンドのショートカットです。npmスクリプトを使用すると、npmコマンドを簡単に実行できます。
+
 開発中のWebアプリケーションを構築するために使用するモジュール群です。以下でそれぞれの役割を説明します。
 
-npm-run-all: 複数のnpm scriptコマンドを同時に実行したり、シーケンシャルに実行したりすることができるパッケージです。
-cpx: ファイルのコピーを簡単に実行することができるツールです。
-rimraf: ファイルやディレクトリを削除するためのパッケージです。通常、rm -rfの代替手段として使用されます。
+- npm-run-all: 複数のnpm scriptコマンドを同時に実行したり、シーケンシャルに実行したりすることができるパッケージです。
+- cpx: ファイルのコピーを簡単に実行することができるツールです。
+- rimraf: ファイルやディレクトリを削除するためのパッケージです。通常、rm -rfの代替手段として使用されます。
+
 これらのツールを使用することで、エラーハンドリングやファイル操作などを簡単に処理することができます。特に、npm run scriptにおいて便利な機能を提供します。
 
 ```
 npm install --save-dev npm-run-all cpx rimraf
 ```
 
+## Gulpとは
+
 GulpはJavaScriptのタスクランナーで、自動化されたビルドプロセスを作成することができます。
 
 Gulpを使用すると、SassまたはLessファイルをコンパイルし、画像を最適化したり、JavaScriptを圧縮したりするなど、いくつかのタスクを自動化できます。
 
-以下はGulpを使用する基本的な手順です：
+以下はGulpを使用する基本的な手順です
 
 Node.jsをインストールします。
+
 ターミナルで、プロジェクトフォルダに移動して npm init を実行して、 package.json ファイルを作成します。
-Gulpをグローバルインストールします： npm install --global gulp-cli
-npm install --save-dev gulp でgulpを開発環境に追加します。
+
+Gulpをインストールします
+
+```
+npm install --save-dev gulp
+```
+
+Gulpタスクを作成します
+
 プロジェクトフォルダに gulpfile.js ファイルを作成します。ここに、必要なモジュールをロードするコードと、各タスクを定義するコードを書きます。
-例えば、CSSファイルをコンパイルするタスクを以下のように定義することができます：
+例えば、CSSファイルをコンパイルするタスクを以下のように定義することができます
 
 ```
 const gulp = require('gulp');
@@ -45,8 +60,12 @@ gulp.task('watch', function () {
 });
 ```
 
+タスクを実行します
+
 ターミナルで、 gulp タスク名 を入力して、タスクを実行します。例えば、上記のタスクを実行するには、 gulp sass と入力します。
 これでGulpを使用して、独自のタスクを作成し、シンプルでエレガントなビルドプロセスを実現できます。
+
+## Asciidocとは
 
 Assciidoctorは、Rubyで書かれたドキュメント変換ツールです。Markdownとは異なり、Asciidoctorは、ドキュメントの構造を表すために、マークアップ言語を使用します。
 
@@ -54,7 +73,7 @@ Assciidoctorは、Rubyで書かれたドキュメント変換ツールです。M
 npm install --save-dev asciidoctor asciidoctor-kroki
 ```
 
-`docs`ディレクトリに`index.adoc`ファイルを作成し、以下の内容を記述します。
+`docs` ディレクトリに `index.adoc` ファイルを作成し、以下の内容を記述します。
 
 ```asciidoc
 :toc: left
@@ -66,7 +85,6 @@ npm install --save-dev asciidoctor asciidoctor-kroki
 == 目的
 
 == 前提
-
 
 == 構成
 * <<anchor-1,サンプル>>
@@ -114,7 +132,11 @@ const asciidoctor = {
       });
     });
     cb();
-  }
+  },
+  watch: (cb) => {
+    watch("./docs/**/*.adoc", asciidoctor.build);
+    cb();
+  },
 }
 
 exports.docs = series(asciidoctor.clean, asciidoctor.build);
@@ -123,7 +145,7 @@ exports.docs = series(asciidoctor.clean, asciidoctor.build);
 gulpタスクを実行します。
 
 ```
-gulp docs
+npx gulp docs
 ```
 
 npmタスクに追加します。
@@ -136,6 +158,197 @@ npmタスクに追加します。
 }
 ```
 
+## BrowserSyncとは
+
+BrowserSyncは、開発中のWebアプリケーションを構築するために使用するモジュール群です。以下でそれぞれの役割を説明します。
+
+インストールします。
+
 ```
 npm install --save-dev browser-sync
+```
+
+`gulpfile.js` に以下の内容を追加します。
+
+```js
+const { series } = require("gulp");
+const { default: rimraf } = require("rimraf");
+const browserSync = require('browser-sync').create();
+
+const asciidoctor = {
+  clean: async (cb) => {
+    await rimraf("./public/docs");
+    cb();
+  },
+  build: (cb) => {
+    const fs = require("fs");
+    const asciidoctor = require("@asciidoctor/core")();
+    const kroki = require("asciidoctor-kroki");
+
+    const krokiRegister = () => {
+      const registry = asciidoctor.Extensions.create();
+      kroki.register(registry);
+      return registry;
+    };
+
+    const inputRootDir = "./docs";
+    const outputRootDir = "./public/docs";
+    const fileNameList = fs.readdirSync(inputRootDir);
+    const docs = fileNameList.filter(RegExp.prototype.test, /.*\.adoc$/);
+
+    docs.map((input) => {
+      const file = `${inputRootDir}/${input}`;
+      asciidoctor.convertFile(file, {
+        safe: "safe",
+        extension_registry: krokiRegister(),
+        to_dir: outputRootDir,
+        mkdirs: true,
+      });
+    });
+    cb();
+  },
+  watch: (cb) => {
+    watch("./docs/**/*.adoc", asciidoctor.build);
+    cb();
+  },
+  server: (cb) => {
+    browserSync.init({
+      server: {
+        baseDir: "./public",
+      },
+    });
+    watch("./public/**/*.html").on("change", browserSync.reload);
+    cb();
+  },
+}
+
+exports.docs = series(asciidoctor.clean, asciidoctor.build, asciidoctor.server);
+```
+
+## 既存のnpmタスクを統合する
+
+webpackのタスクを追加します。
+
+```js
+
+const webpack = {
+  clean: async (cb) => {
+    await rimraf("./public");
+    cb();
+  },
+  build: (cb) => {
+    const webpack = require("webpack");
+    const webpackConfig = require("./webpack.config.js");
+    webpack(webpackConfig, (err, stats) => {
+      if (err || stats.hasErrors()) {
+        console.error(err);
+      }
+      cb();
+    });
+  },
+  watch: (cb) => {
+    const webpack = require("webpack");
+    const webpackConfig = require("./webpack.config.js");
+    const compiler = webpack(webpackConfig);
+    compiler.watch({}, (err, stats) => {
+      if (err || stats.hasErrors()) {
+        console.error(err);
+      }
+    });
+    cb();
+  },
+  server: (cb) => {
+    const webpack = require("webpack");
+    const webpackConfig = require("./webpack.config.js");
+    const compiler = webpack(webpackConfig);
+    const WebpackDevServer = require("webpack-dev-server");
+    const devServerOptions = Object.assign({}, webpackConfig.devServer, {
+      open: false,
+    });
+    const server = new WebpackDevServer(compiler, devServerOptions);
+    server.start(devServerOptions.port, devServerOptions.host, () => {
+      console.log("Starting server on http://localhost:8080");
+    });
+    cb();
+  },
+}
+```
+
+jestのタスクを追加します。
+
+```js
+const jest = {
+  test: (cb) => {
+    const jest = require("jest");
+    jest.run(["--coverage"]);
+    cb();
+  },
+  watch: (cb) => {
+    const jest = require("jest");
+    jest.run(["--watch"]);
+    cb();
+  },
+}
+```
+
+タスクをエクスポートします。
+
+```js
+exports.default = series(
+  webpack.clean,
+  webpack.build,
+  asciidoctor.clean,
+  asciidoctor.build,
+  series(
+    parallel(
+      webpack.server,
+      asciidoctor.server
+    ),
+    parallel(
+      webpack.watch,
+      asciidoctor.watch,
+      jest.watch
+    )
+  )
+);
+exports.build = series(
+  webpack.clean,
+  webpack.build,
+  asciidoctor.clean,
+  asciidoctor.build
+);
+exports.test = series(jest.test);
+exports.docs = series(
+  asciidoctor.clean,
+  asciidoctor.build,
+  parallel(
+    asciidoctor.server,
+    asciidoctor.watch
+  )
+);
+exports.watch = parallel(
+  webpack.watch,
+  asciidoctor.watch,
+  jest.watch
+);
+```
+
+package.jsonのscript以下の内容に変更します。
+
+```json
+{
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp build",
+    "test": "gulp test",
+    "docs": "gulp docs",
+    "watch": "gulp watch"
+  }
+}
+```
+
+npmタスクからgulpのdefaultタスクを実行します。
+
+```
+npm start
 ```
