@@ -668,7 +668,7 @@ const deflate = (function () {
       /* We check for insufficient lookahead only every 8th comparison;
        * the 256th check will be made at strstart+258.
        */
-      do {} while (
+      do { } while (
         zip_window[++scanp] == zip_window[++matchp] &&
         zip_window[++scanp] == zip_window[++matchp] &&
         zip_window[++scanp] == zip_window[++matchp] &&

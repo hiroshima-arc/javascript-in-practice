@@ -32,14 +32,12 @@
   "scripts": {
     "start": "nf start -j Procfile.dev",
     "app": "webpack server --config ./webpack.config.js --open",
-    "test": "jest --coverage",
-    "watch:app": "webpack --watch --config webpack.config.js",
-    "watch:test": "jest --watch",
+    "test": "gulp test",
+    "watch": "gulp watch",
     "build": "gulp build",
-    "clean": "rimraf ./public",
     "docs": "gulp docs",
-    "deploy:local": "vercel dev",
     "deploy": "vercel",
+    "deploy:local": "vercel dev",
     "deploy:heroku": "git push heroku wip/episode/00:master ",
     "heroku-postbuild": "webpack --config ./webpack.config.js --progress"
   },
