@@ -8,16 +8,14 @@
 
 ## 開発言語について
 
-### 概要
-JavaScriptは動的なWebページを作成するために使用されるプログラミング言語です。Webブラウザ上で実行されるため、クライアントサイドの処理に特化しています。
-Node.jsは、サーバーサイドでJavaScriptを実行するためのプログラムです。
+JavaScriptは動的なWebページを作成するために使用されるプログラミング言語です。Webブラウザ上で実行されるため、クライアントサイドの処理に特化しています。Node.jsは、サーバーサイドでJavaScriptを実行するためのプログラムです。ここでは、クライアントサイド・サーバーサイドをまとめて,JavaScriptと呼ぶことにします。
 
-#### JavaScriptとECMAScript
+### JavaScriptとECMAScript
 JavaScriptは、ウェブサイトやWebアプリケーションの作成に広く使用されているプログラミング言語であり、HTMLとCSSとともに、ウェブページが動的で対話的になり、ユーザーと対話するための豊富な機能を提供します。JavaScriptは、クロスプラットフォームの言語であり、サーバーサイドの開発にも使用されます。JavaScriptは、ECMAScript仕様に従って設計され、現在最新のバージョンはECMAScript 2021です。
 
 ECMAScriptは、JavaScript言語の標準化された仕様であり、文法、セマンティクス、および文法解析と実行に関する説明を提供します。ES2015（またはES6）以降のバージョンでは、ECMAScriptはより大きな役割を担うようになりました。現代のWebアプリケーションやフレームワークでは、多くの場合、主要な開発言語として使用されることがあります。
 
-#### Node.jsとは
+### Node.jsとは
 Node.jsは、サーバーサイドでJavaScriptを実行するためのプログラムです。Node.jsは、GoogleのV8 JavaScriptエンジンを使用してJavaScriptを実行し、JavaScriptをウェブブラウザ以外の場所で実行することを可能にします。
 
 Node.jsは、スケーラビリティ、高速性、非同期I/O、拡張性などの特性を持っており、WebアプリケーションやAPIなどのバックエンドの開発に広く使用されています。Node.jsを使用することで、同じ言語（JavaScript）でフロントエンドとバックエンドを実装できるため、開発者の生産性が向上し、コードの再利用性が高まるという利点があります。
@@ -26,12 +24,12 @@ Node.jsは、スケーラビリティ、高速性、非同期I/O、拡張性な�
 
 Node.jsは、JavaScriptによるサーバーサイド開発を可能にし、Web開発において広く使用されるプログラミング言語の一つとなっています。
 
-#### ES5とES6
+### ES5とES6
 ES5とはECMAScript 5の略称で、2009年にリリースされたJavaScriptのバージョンです。ES5は古いバージョンのJavaScriptであり、多くの現代的な機能が欠落しています。しかし、ES5はまだよく使われており、完全なWebアプリケーションを作成するための基本的な構文やコーディング方法を示しています。
 
 一方、ES6（またはES2015）は2015年にリリースされた最新バージョンのJavaScriptです。ES6は多くの改良、新機能、文法の修正が加えられています。例えば、let / constキーワードの導入、クラスの追加、アロー関数、デフォルト引数、分割代入などが挙げられます。これらの機能はコーディングを簡素化し、可読性や保守性を向上させました。
 
-ただし、ES6は完全に採用されているわけではなく、ブラウザ間の互換性問題があったり、古いプロジェクトで使用されたりすることがあります。この場合、Babelと呼ばれるJavaScriptトランスパイラを使用して、ES6からES5に変換することができます。Babelは、次世代のJavaScriptコードをブラウザが理解できる旧世代のJavaScriptコードに変換するツールであり、babelが有名です。babelを使うことで、ES6以降で追加された機能を使用したコードを、ES5以前の環境でも実行することができます。
+ただし、ES6は完全に採用されているわけではなく、ブラウザ間の互換性問題があったり、古いプロジェクトで使用されたりすることがあります。この場合、Babelと呼ばれるJavaScriptトランスパイラを使用して、ES6からES5に変換することができます。Babelは、次世代のJavaScriptコードをブラウザが理解できる旧世代のJavaScriptコードに変換するツールです。babelを使うことで、ES6以降で追加された機能を使用したコードを、ES5以前の環境でも実行することができます。
 
 ## バージョンマネージャー
 
@@ -48,6 +46,8 @@ nvmは、GitHubからダウンロードすることができます。以下の�
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 ```
+
+windowsでは https://github.com/coreybutler/nvm-windows[nvm-windows] を使用します。
 
 #### nvmのバージョンを確認
 
@@ -130,7 +130,8 @@ npm install --save-dev @babel/core @babel/cli @babel/preset-env
 
 また、トランスパイルのためのBabelプラグインやプリセットを独自にインストールすることもできます。
 
-4 . Babelの設定ファイルの作成
+#### Babelの設定ファイルの作成
+
 Babelを使ってトランスパイルするためには、Babelの設定ファイル .babelrcを作成します。
 
 ```
@@ -144,6 +145,7 @@ Babelを使ってトランスパイルするためには、Babelの設定ファ�
 上記の例では、 @babel/preset-env を利用しています。これは、指定したECMAScriptのバージョンに対応したプラグインを自動的に追加してくれるプリセットです。
 
 #### トランスパイルの実行
+
 Babelでトランスパイルを行うには、以下のコマンドを実行します。
 
 ```
@@ -270,11 +272,15 @@ webpackのセットアップには以下の手順があります。
 
 ```
 npm install --save-dev webpack webpack-cli
+npx webpack --version
 ```
 
 これで、Webpackがインストールされたことを確認できます。
 
+npxは、npmのパッケージを実行するためのコマンドです。 npx webpack --version とすることで、ローカルにインストールされたWebpackのバージョンを確認することができます。
+
 #### 設定ファイルの作成
+
 Webpackを実行する前に、設定ファイルを用意する必要があります。 webpack.config.js というファイル名で以下のファイルを生成してください。
 
 ```js
@@ -363,7 +369,6 @@ module.exports = {
       },
     ],
   },
-  // ES5(IE11等)向けの指定
   target: ["web", "es5"],
 };
 ```
@@ -413,8 +418,6 @@ Hello ES6
 JavaScritpのモジュールシステムには、CommonJSとES Modulesがあります。この二つは異なる構文と仕組みを持ち、互換性がありません。そのため、ES Modulesを使用する場合は、CommonJSの構文をES Modulesに変換する必要があります。
 
 ### CommonJSとES Modulesについて
-
-CommonJS と ES Modulesは、Node.jsやブラウザなどで使われる JavaScriptのモジュールシステムです。しかし、この二つは異なる構文と仕組みを持ち、互換性がありません。
 
 CommonJSは Node.js のデフォルトのモジュールシステムであり、 exports オブジェクトに値を追加することによって他のファイルからそれらの値を参照できます。そして、require() 関数を使い、外部のモジュールを読み込むことができます。
 
@@ -484,7 +487,7 @@ exportとexport defaultの違いについて説明します。
 
 まず、共通して言えることは、両方のキーワードはES Modulesで使用されます。これにより、JavaScriptコードをモジュール化して、必要に応じて再利用できます。
 
-export： exportは、名前付きまたはデフォルトのエクスポート同様の役割を果たします。 ただし、最大の違いは、名前が付与されているかどうかです。
+exportは、名前付きまたはデフォルトのエクスポート同様の役割を果たします。 ただし、最大の違いは、名前が付与されているかどうかです。
 
 名前つき
 
@@ -519,7 +522,7 @@ import Greeting from 'greeting';
 let instance = new Greeting(); // “Hello, ES modules！”
 ```
 
-export default: export defaultは、ES6の標準で初めて導入されたdefaultから始まるエクスポート文法であり、単一のモジュールでデフォルトのエクスポートを定義するために使用されます。デフォルトのエクスポートには、名前がつけられていません。
+export defaultは、ES6の標準で初めて導入されたdefaultから始まるエクスポート文法であり、単一のモジュールでデフォルトのエクスポートを定義するために使用されます。デフォルトのエクスポートには、名前がつけられていません。
 
 ```js
 // greeting.js
@@ -609,21 +612,21 @@ npx babel src --extensions '.ts,.tsx' --out-dir lib
 
 これで、TypeScriptファイルが変換され、出力されたJavaScriptファイルにはES5コードが含まれるようになります。
 
-### モジュールバンドラの設定
+### モジュールバンドラーの設定
 
-モジュールバンドラを使用してTypeScriptを変換する手順は以下の通りです。
+モジュールバンドラーを使用してTypeScriptを変換する手順は以下の通りです。
 
 ```
 npm install --save-dev ts-loader
 ```
 
-`tsconfig.json`を作成します
+`tsconfig.json` を作成します
 
 ```
 npx tsc --init
 ```
 
-webpack.config.jsファイルを更新し、以下のように設定します。
+webpack.config.js ファイルを更新し、以下のように設定します。
 
 ```js
 module.exports = {
@@ -690,9 +693,11 @@ npx ts-node src/index_typescript.ts
 
 ### webpack-dev-serverのセットアップ
 
+Webpack-dev-serverは、開発者がフロントエンドの開発に集中することを可能にするツールであり、「ライブリロード」（Live Reloading）や「ホットリロード」（Hot Reloading）などの機能を提供します。
+
 #### webpack-dev-serverのインストール
 
-Webpack-dev-serverは、開発者がフロントエンドの開発に集中することを可能にするツールであり、「ライブリロード」（Live Reloading）や「ホットリロード」（Hot Reloading）などの機能を提供します。
+webpack-dev-serverをインストールするには、次のコマンドを実行します。
 
 ```
 npm install webpack-dev-server --save-dev
@@ -702,7 +707,7 @@ npm install webpack-dev-server --save-dev
 
 #### webpack-dev-serverの設定
 
-次に、webpack.config.jsファイルに次のような設定を追加します：
+次に、webpack.config.jsファイルに次のような設定を追加します
 
 ```js
 const path = require('path');
@@ -733,10 +738,25 @@ npx webpack serve
 
 Webpack-dev-serverを使用することで、開発時にローカルサーバーを立ち上げ、ファイルの変更をリアルタイムに反映させることができます。また、このコードでは、HTMLWebpackPluginプラグインを使用してjsファイルに自動的にバンドルされたscriptタグを生成し、index.htmlに挿入することができます。
 
-具体的には、webpack.config.jsの設定ファイルでhtml-webpack-pluginを次のように設定します：
+具体的には、webpack.config.jsの設定ファイルでhtml-webpack-pluginを次のように設定します
 
 ```
 npm install  html-webpack-plugin --save-dev
+```
+
+プロジェクト直下にindex.htmlを作成し、以下のように記述します。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Webpack 5 Tutorial</title>
+  </head>
+  <body>
+    <h1>Webpack 5 Tutorial</h1>
+  </body>
+</html>
 ```
 
 ```js
@@ -747,13 +767,13 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html' // インデックステンプレートを指定
+      template: 'index.html' // インデックステンプレートを指定
     })
   ]
 };
 ```
 
-これにより、自動的にオプションで指定したテンプレート（src/index.html）をベースとして生成されたHTMLファイルが、Webpack-dev-serverが起動するローカルサーバーのルートディレクトリに保存されます。このHTMLファイルには、自動的にビルドされたJavaScriptバンドルファイルへのscriptタグが追加されます。
+これにより、自動的にオプションで指定したテンプレート（index.html）をベースとして生成されたHTMLファイルが、Webpack-dev-serverが起動するローカルサーバーのルートディレクトリに保存されます。このHTMLファイルには、自動的にビルドされたJavaScriptバンドルファイルへのscriptタグが追加されます。
 
 この方法を使用することで、現在の開発環境を維持しながら、開発者は自動生成されたHTMLファイルを更新しなくても、変更後即座に反映がされるバンドルされたJavaScriptファイルを実行できます。
 
@@ -794,7 +814,7 @@ TypeScriptでソースマップを有効化するには、tsconfig.jsonに以下
 
 ### テスティングフレームワークのセットアップ
 
-#### jestとは
+#### Jestとは
 JestはFacebookによって開発され、JavaScriptのテストフレームワークです。Jestの主な目的は、JavaScriptプロジェクトで単体テストもしくは統合テストを効率的かつ簡単に実行することです。
 
 Jestは、mochaやjasmineなどの他のJavaScript用のテストフレームワークよりも、より高速かつシンプルで、開発者がテストを書きやすくなるように設計されています。また、JestはReactアプリケーションのテストに特化しているためReactのSnapshot Testing機能を利用したUIコンポーネントのテストに使われることが多くあります。
@@ -866,27 +886,31 @@ npm test
 
 JavaScriptのファイル命名規則として一般的に使用されるのは、以下のようなものがあります。
 
-キャメルケース : ファイル名の先頭を小文字で始め、複数の単語が含まれる場合は、先頭を大文字で始める。例：utils.js
-スネークケース : 単語間をアンダースコアで区切り、すべての文字を小文字で表記する。例：utils_functions.js
-パスカルケース:単語の最初の文字だけを大文字で表記し、単語間をつなぎ合わせる形式。例: UtilsFunctions.js
+- キャメルケース : ファイル名の先頭を小文字で始め、複数の単語が含まれる場合は、先頭を大文字で始める。例：utils.js
+- スネークケース : 単語間をアンダースコアで区切り、すべての文字を小文字で表記する。例：utils_functions.js
+- パスカルケース:単語の最初の文字だけを大文字で表記し、単語間をつなぎ合わせる形式。例: UtilsFunctions.js
+
 これらの規則は、個人やチームによって異なることがあります。ただし、コンシステントで意味のある命名を使用することで、可読性を高めることができます。
 
 Node.jsにおける一般的なファイル命名規則は、次のようになります。
 
-ファイル名には、小文字の英字、数字、ハイフン（-）、アンダースコア（_）のみを使用します。
-ファイル名は、拡張子を含めてできるだけ短く、明確でわかりやすい名前をつけるようにします。
-ファイル名は、使用する場所や機能に基づいて命名するようにします。
+- ファイル名には、小文字の英字、数字、ハイフン（-）、アンダースコア（_）のみを使用します。
+- ファイル名は、拡張子を含めてできるだけ短く、明確でわかりやすい名前をつけるようにします。
+- ファイル名は、使用する場所や機能に基づいて命名するようにします。
+
 Node.jsでは、ファイル名には「.js」の拡張子をつけることが一般的です。ただし、特定の用途に応じて異なる拡張子を使用することもあります。
 例えば、以下のようなファイル名が一般的に使われます。
 
-server.js: Node.jsで作成されたWebサーバーのメインファイル
-app.js: Node.jsで作成されたアプリケーションのメインファイル
-utils.js: 共通のユーティリティ関数を含むファイル
-config.js: アプリケーションの設定ファイル
+- server.js: Node.jsで作成されたWebサーバーのメインファイル
+- app.js: Node.jsで作成されたアプリケーションのメインファイル
+- utils.js: 共通のユーティリティ関数を含むファイル
+- config.js: アプリケーションの設定ファイル
+
 また、Node.jsプロジェクトでは、ファイル名の前に「index」という名前を付けることがよくあります。これは、そのディレクトリ内のデフォルトのエクスポートを表すファイルとして機能するためです。例えば、以下のようなファイル名があります。
 
-index.js: モジュールのエントリーポイントとして機能するファイル
-routes/index.js: アプリケーションのルーティングを管理するファイル
+- index.js: モジュールのエントリーポイントとして機能するファイル
+- routes/index.js: アプリケーションのルーティングを管理するファイル
+
 以上が、一般的なNode.jsファイル命名規則の例です。しかし、プロジェクトやチームによっては、異なる規則が使われる場合があります。
 
 ### 開発ツールのセットアップ
