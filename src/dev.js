@@ -1,4 +1,4 @@
-import marked from "marked";
+import marked from 'marked';
 
 const contents = `
 ## 機能名
@@ -62,8 +62,8 @@ export const setUp = () => {
 };
 
 const init = () => {
-  document.addEventListener("DOMContentLoaded", () => {
-    const dev = document.querySelector("#app-dev");
+  document.addEventListener('DOMContentLoaded', () => {
+    const dev = document.querySelector('#app-dev');
     if (dev !== null) {
       dev.innerHTML = `
             <div class="container">
@@ -91,8 +91,8 @@ const init = () => {
 };
 
 const documents = (contents) => {
-  document.addEventListener("DOMContentLoaded", () => {
-    const spec = document.getElementById("spec");
+  document.addEventListener('DOMContentLoaded', () => {
+    const spec = document.getElementById('spec');
     if (spec) {
       // eslint-disable-next-line no-undef
       spec.innerHTML = marked(contents);
@@ -102,21 +102,21 @@ const documents = (contents) => {
 
 const diagrams = (uml, erd) => {
   const classDiagram = ((uml) => {
-    const inputId = "class-diagram-input";
-    const outputId = "class-im";
+    const inputId = 'class-diagram-input';
+    const outputId = 'class-im';
     const source = uml;
     compress(source, outputId);
   })(uml);
 
   const erDiagram = ((erd) => {
-    const inputId = "er-diagram-input";
-    const outputId = "er-im";
+    const inputId = 'er-diagram-input';
+    const outputId = 'er-im';
     const source = erd;
     compress(source, outputId);
   })(erd);
 
   function encode64(data) {
-    let r = "";
+    let r = '';
     for (let i = 0; i < data.length; i += 3) {
       if (i + 2 == data.length) {
         r += append3bytes(data.charCodeAt(i), data.charCodeAt(i + 1), 0);
@@ -138,7 +138,7 @@ const diagrams = (uml, erd) => {
     const c2 = ((b1 & 0x3) << 4) | (b2 >> 4);
     const c3 = ((b2 & 0xf) << 2) | (b3 >> 6);
     const c4 = b3 & 0x3f;
-    let r = "";
+    let r = '';
     r += encode6bit(c1 & 0x3f);
     r += encode6bit(c2 & 0x3f);
     r += encode6bit(c3 & 0x3f);
@@ -160,26 +160,26 @@ const diagrams = (uml, erd) => {
     }
     b -= 26;
     if (b == 0) {
-      return "-";
+      return '-';
     }
     if (b == 1) {
-      return "_";
+      return '_';
     }
-    return "?";
+    return '?';
   }
 
-  var deflater = window.SharedWorker && new SharedWorker("rawdeflate.js");
+  var deflater = window.SharedWorker && new SharedWorker('rawdeflate.js');
   if (deflater) {
-    deflater.port.addEventListener("message", done_deflating, false);
+    deflater.port.addEventListener('message', done_deflating, false);
     deflater.port.start();
   } else if (window.Worker) {
-    deflater = new Worker("rawdeflate.js");
+    deflater = new Worker('rawdeflate.js');
     deflater.onmessage = done_deflating;
   }
 
   function done_deflating(e, id) {
     document.getElementById(id).src =
-      "http://www.plantuml.com/plantuml/img/" + encode64(e.data);
+      'http://www.plantuml.com/plantuml/img/' + encode64(e.data);
   }
 
   function compress(s, id) {
@@ -1862,7 +1862,7 @@ const deflate = (function () {
 
     zip_deflate_data = str;
     zip_deflate_pos = 0;
-    if (typeof level == "undefined") level = zip_DEFAULT_LEVEL;
+    if (typeof level == 'undefined') level = zip_DEFAULT_LEVEL;
     zip_deflate_start(level);
 
     var buff = new Array(1024);
@@ -1872,9 +1872,9 @@ const deflate = (function () {
       for (j = 0; j < i; j++) {
         cbuf[j] = String.fromCharCode(buff[j]);
       }
-      aout[aout.length] = cbuf.join("");
+      aout[aout.length] = cbuf.join('');
     }
     zip_deflate_data = null; // G.C.
-    return aout.join("");
+    return aout.join('');
   };
 })();

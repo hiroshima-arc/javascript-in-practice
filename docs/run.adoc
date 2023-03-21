@@ -227,6 +227,14 @@ exports.docs = series(asciidoctor.clean, asciidoctor.build, asciidoctor.server);
 
 ## 既存のnpmタスクを統合する
 
+既存のnpmタスクを統合することで、開発時に必要なタスクを一つのコマンドで実行できます。
+
+パッケージをインストールします。
+
+```
+npm install gulp-prettier --save-dev
+```
+
 webpackのタスクを追加します。
 
 ```js
@@ -291,6 +299,24 @@ const jest = {
 }
 ```
 
+prettierのタスクを追加します。
+
+```js
+const prettier = {
+  format: (cb) => {
+    const prettier = require('gulp-prettier');
+    return src("./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}")
+      .pipe(prettier({ singleQuote: true }))
+      .pipe(dest('src'));
+  },
+  watch: (cb) => {
+    watch("./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}", prettier.format);
+    cb();
+  },
+};
+
+```
+
 タスクをエクスポートします。
 
 ```js
@@ -300,37 +326,31 @@ exports.default = series(
   asciidoctor.clean,
   asciidoctor.build,
   series(
-    parallel(
-      webpack.server,
-      asciidoctor.server
-    ),
-    parallel(
-      webpack.watch,
-      asciidoctor.watch,
-      jest.watch
-    )
+    parallel(webpack.server, asciidoctor.server),
+    parallel(webpack.watch, asciidoctor.watch, jest.watch)
   )
 );
+
 exports.build = series(
   webpack.clean,
   webpack.build,
   asciidoctor.clean,
-  asciidoctor.build
+  asciidoctor.build,
+  prettier.format
 );
+
 exports.test = series(jest.test);
+
+exports.format = series(prettier.format);
+
 exports.docs = series(
   asciidoctor.clean,
   asciidoctor.build,
-  parallel(
-    asciidoctor.server,
-    asciidoctor.watch
-  )
+  parallel(asciidoctor.server, asciidoctor.watch)
 );
-exports.watch = parallel(
-  webpack.watch,
-  asciidoctor.watch,
-  jest.watch
-);
+
+exports.watch = parallel(webpack.watch, asciidoctor.watch, jest.watch);
+
 ```
 
 package.jsonのscript以下の内容に変更します。
@@ -342,7 +362,8 @@ package.jsonのscript以下の内容に変更します。
     "build": "gulp build",
     "test": "gulp test",
     "docs": "gulp docs",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "format": "gulp format"
   }
 }
 ```

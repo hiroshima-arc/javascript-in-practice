@@ -1,4 +1,5 @@
-const { series, parallel, watch } = require("gulp");
+const exp = require("constants");
+const { series, parallel, watch, src, dest } = require("gulp");
 const { default: rimraf } = require("rimraf");
 const browserSync = require("browser-sync").create();
 
@@ -104,6 +105,19 @@ const jest = {
   },
 };
 
+const prettier = {
+  format: (cb) => {
+    const prettier = require('gulp-prettier');
+    return src("./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}")
+      .pipe(prettier({ singleQuote: true }))
+      .pipe(dest('src'));
+  },
+  watch: (cb) => {
+    watch("./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}", prettier.format);
+    cb();
+  },
+};
+
 exports.default = series(
   webpack.clean,
   webpack.build,
@@ -114,16 +128,23 @@ exports.default = series(
     parallel(webpack.watch, asciidoctor.watch, jest.watch)
   )
 );
+
 exports.build = series(
   webpack.clean,
   webpack.build,
   asciidoctor.clean,
-  asciidoctor.build
+  asciidoctor.build,
+  prettier.format
 );
+
 exports.test = series(jest.test);
+
+exports.format = series(prettier.format);
+
 exports.docs = series(
   asciidoctor.clean,
   asciidoctor.build,
   parallel(asciidoctor.server, asciidoctor.watch)
 );
+
 exports.watch = parallel(webpack.watch, asciidoctor.watch, jest.watch);

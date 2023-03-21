@@ -78,3 +78,5 @@ npm start
 - [Conventional Commits 1.0.0](https://www.conventionalcommits.org/ja/v1.0.0/)
 - [最新版で学ぶ webpack 5 入門 Babel 7 で ES2021 環境の構築](https://ics.media/entry/16028/)
 - [最新版 TypeScript+webpack 5 の環境構築まとめ](https://ics.media/entry/16329/#)
+- [Gulp](https://gulpjs.com/)
+- [Prettier](https://prettier.io/)
