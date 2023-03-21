@@ -311,7 +311,7 @@ marp = {
     cb();
   },
   watch: (cb) => {
-    watch("./slides/**/*.md", marp.build);
+    watch("./docs/slides/**/*.md", marp.build);
     cb();
   }
 }

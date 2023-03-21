@@ -16,7 +16,7 @@ module.exports = {
     port: 9000,
     allowedHosts: "all",
   },
-  entry: "./index.ts",
+  entry: "./index.js",
   output: {
     path: __dirname + "/public",
     filename: "bundle.js",
