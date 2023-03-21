@@ -1,61 +1,7 @@
 import marked from 'marked';
 
-const contents = `
-## 機能名
-## 仕様
-## TODOリスト
-`;
-
-const uml = `
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-class ArrayList {
-  Object[] elementData
-  size()
-}
-enum TimeUnit {
-  DAYS
-  HOURS
-  MINUTES
-}
-annotation SuppressWarnings
-`;
-
-const erd = `
-' hide the spot
-hide circle
-' avoid problems with angled crows feet
-skinparam linetype ortho
-entity "Entity01" as e01 {
-  *e1_id : number <<generated>>
-  --
-  *name : text
-  description : text
-}
-entity "Entity02" as e02 {
-  *e2_id : number <<generated>>
-  --
-  *e1_id : number <<FK>>
-  other_details : text
-}
-entity "Entity03" as e03 {
-  *e3_id : number <<generated>>
-  --
-  e1_id : number <<FK>>
-  other_details : text
-}
-e01 ||..o{ e02
-e01 |o..o{ e03
-`;
-
-export const setUp = () => {
+export const render = (params) => {
+  const { contents, uml, erd } = params;
   init();
   documents(contents);
   diagrams(uml, erd);
@@ -668,7 +614,7 @@ const deflate = (function () {
       /* We check for insufficient lookahead only every 8th comparison;
        * the 256th check will be made at strstart+258.
        */
-      do {} while (
+      do { } while (
         zip_window[++scanp] == zip_window[++matchp] &&
         zip_window[++scanp] == zip_window[++matchp] &&
         zip_window[++scanp] == zip_window[++matchp] &&
