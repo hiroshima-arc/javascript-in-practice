@@ -225,6 +225,101 @@ const asciidoctor = {
 exports.docs = series(asciidoctor.clean, asciidoctor.build, asciidoctor.server);
 ```
 
+## Marpとは
+
+Marpは、Markdownでスライドを作成するためのツールです。以下でそれぞれの役割を説明します。
+
+インストールします。
+
+```bash
+npm install --save-dev @marp-team/marp-cli
+```
+
+スライドを作成します。
+
+`docs/slides` ディレクトリに `PITCHME.md` ファイルを作成し、以下の内容を記述します。
+
+```markdown
+---
+marp: true
+---
+
+### タイトル
+
+---
+
+### 構成
+
+- 自己紹介
+- トピック 1
+- トピック 2
+- トピック 3
+
+---
+
+### 自己紹介
+
+---
+
+### トピック 1
+
+---
+
+### トピック 2
+
+---
+
+### トピック 3
+
+---
+
+### おわり
+
+---
+
+### 参照
+
+---
+````
+
+スライドをビルドします。
+
+```bash
+npx marp --html --allow-local-files ../docs/slides/PITCHME.md
+```
+
+gulpタスクを作成します。
+
+```js
+marp = {
+  build: (cb) => {
+    const { marpCli } = require('@marp-team/marp-cli')
+
+    marpCli(['./docs/slides/PITCHME.md', '--html', '--output', './public/slides/index.html'])
+      .then((exitStatus) => {
+        if (exitStatus > 0) {
+          console.error(`Failure (Exit status: ${exitStatus})`)
+        } else {
+          console.log('Success')
+        }
+      })
+      .catch(console.error)
+    cb();
+  },
+  clean: async (cb) => {
+    await rimraf("./public/slides");
+    cb();
+  },
+  watch: (cb) => {
+    watch("./slides/**/*.md", marp.build);
+    cb();
+  }
+}
+
+exports.slides = series(marp.build);
+```
+
+
 ## 既存のnpmタスクを統合する
 
 既存のnpmタスクを統合することで、開発時に必要なタスクを一つのコマンドで実行できます。
@@ -325,9 +420,11 @@ exports.default = series(
   webpack.build,
   asciidoctor.clean,
   asciidoctor.build,
+  marp.clean,
+  marp.build,
   series(
     parallel(webpack.server, asciidoctor.server),
-    parallel(webpack.watch, asciidoctor.watch, jest.watch)
+    parallel(webpack.watch, asciidoctor.watch, jest.watch, marp.watch)
   )
 );
 
@@ -336,6 +433,8 @@ exports.build = series(
   webpack.build,
   asciidoctor.clean,
   asciidoctor.build,
+  marp.clean,
+  marp.build,
   prettier.format
 );
 
@@ -343,14 +442,17 @@ exports.test = series(jest.test);
 
 exports.format = series(prettier.format);
 
+exports.slides = series(marp.build);
+
 exports.docs = series(
   asciidoctor.clean,
   asciidoctor.build,
-  parallel(asciidoctor.server, asciidoctor.watch)
+  marp.clean,
+  marp.build,
+  parallel(asciidoctor.server, asciidoctor.watch, marp.watch),
 );
 
-exports.watch = parallel(webpack.watch, asciidoctor.watch, jest.watch);
-
+exports.watch = parallel(webpack.watch, asciidoctor.watch, jest.watch, marp.watch);
 ```
 
 package.jsonのscript以下の内容に変更します。
@@ -363,7 +465,8 @@ package.jsonのscript以下の内容に変更します。
     "test": "gulp test",
     "docs": "gulp docs",
     "watch": "gulp watch",
-    "format": "gulp format"
+    "format": "gulp format",
+    "slides": "gulp slides"
   }
 }
 ```

@@ -60,6 +60,7 @@ npm start
 - Gulp とは
 - Asciidoc とは
 - BrowserSync とは
+- Marp とは
 - 既存の npm タスクを統合する
 
 **[⬆ back to top](#構成)**
@@ -80,3 +81,4 @@ npm start
 - [最新版 TypeScript+webpack 5 の環境構築まとめ](https://ics.media/entry/16329/#)
 - [Gulp](https://gulpjs.com/)
 - [Prettier](https://prettier.io/)
+- [Marp](https://github.com/marp-team/marp)

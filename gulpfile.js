@@ -1,4 +1,3 @@
-const exp = require("constants");
 const { series, parallel, watch, src, dest } = require("gulp");
 const { default: rimraf } = require("rimraf");
 const browserSync = require("browser-sync").create();
@@ -118,14 +117,42 @@ const prettier = {
   },
 };
 
+const marp = {
+  build: (cb) => {
+    const { marpCli } = require('@marp-team/marp-cli')
+
+    marpCli(['./docs/slides/PITCHME.md', '--html', '--output', './public/slides/index.html'])
+      .then((exitStatus) => {
+        if (exitStatus > 0) {
+          console.error(`Failure (Exit status: ${exitStatus})`)
+        } else {
+          console.log('Success')
+        }
+      })
+      .catch(console.error)
+    cb();
+  },
+  clean: async (cb) => {
+    await rimraf("./public/slides");
+    cb();
+  },
+  watch: (cb) => {
+    watch("./docs/slides/**/*.md", marp.build);
+    cb();
+  }
+}
+
 exports.default = series(
   webpack.clean,
   webpack.build,
   asciidoctor.clean,
   asciidoctor.build,
+  marp.clean,
+  marp.build,
   series(
     parallel(webpack.server, asciidoctor.server),
-    parallel(webpack.watch, asciidoctor.watch, jest.watch)
+    parallel(webpack.watch, asciidoctor.watch, marp.watch),
+    parallel(jest.watch)
   )
 );
 
@@ -134,6 +161,8 @@ exports.build = series(
   webpack.build,
   asciidoctor.clean,
   asciidoctor.build,
+  marp.clean,
+  marp.build,
   prettier.format
 );
 
@@ -141,10 +170,14 @@ exports.test = series(jest.test);
 
 exports.format = series(prettier.format);
 
+exports.slides = series(marp.build);
+
 exports.docs = series(
   asciidoctor.clean,
   asciidoctor.build,
-  parallel(asciidoctor.server, asciidoctor.watch)
+  marp.clean,
+  marp.build,
+  parallel(asciidoctor.server, asciidoctor.watch, marp.watch),
 );
 
-exports.watch = parallel(webpack.watch, asciidoctor.watch, jest.watch);
+exports.watch = parallel(webpack.watch, asciidoctor.watch, marp.watch, jest.watch);
