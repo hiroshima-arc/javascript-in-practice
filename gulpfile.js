@@ -142,13 +142,22 @@ const marp = {
   }
 }
 
+const webpackBuildTasks = () => {
+  return series(webpack.clean, webpack.build);
+}
+
+const asciidoctorBuildTasks = () => {
+  return series(asciidoctor.clean, asciidoctor.build);
+}
+
+const marpBuildTasks = () => {
+  return series(marp.clean, marp.build);
+}
+
 exports.default = series(
-  webpack.clean,
-  webpack.build,
-  asciidoctor.clean,
-  asciidoctor.build,
-  marp.clean,
-  marp.build,
+  webpackBuildTasks(),
+  asciidoctorBuildTasks(),
+  marpBuildTasks(),
   series(
     parallel(webpack.server, asciidoctor.server),
     parallel(webpack.watch, asciidoctor.watch, marp.watch),
@@ -157,12 +166,9 @@ exports.default = series(
 );
 
 exports.build = series(
-  webpack.clean,
-  webpack.build,
-  asciidoctor.clean,
-  asciidoctor.build,
-  marp.clean,
-  marp.build,
+  webpackBuildTasks(),
+  asciidoctorBuildTasks(),
+  marpBuildTasks(),
   prettier.format
 );
 
@@ -173,10 +179,8 @@ exports.format = series(prettier.format);
 exports.slides = series(marp.build);
 
 exports.docs = series(
-  asciidoctor.clean,
-  asciidoctor.build,
-  marp.clean,
-  marp.build,
+  asciidoctorBuildTasks(),
+  marpBuildTasks(),
   parallel(asciidoctor.server, asciidoctor.watch, marp.watch),
 );
 

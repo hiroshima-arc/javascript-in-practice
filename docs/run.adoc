@@ -415,26 +415,33 @@ const prettier = {
 タスクをエクスポートします。
 
 ```js
+const webpackBuildTasks = () => {
+  return series(webpack.clean, webpack.build);
+}
+
+const asciidoctorBuildTasks = () => {
+  return series(asciidoctor.clean, asciidoctor.build);
+}
+
+const marpBuildTasks = () => {
+  return series(marp.clean, marp.build);
+}
+
 exports.default = series(
-  webpack.clean,
-  webpack.build,
-  asciidoctor.clean,
-  asciidoctor.build,
-  marp.clean,
-  marp.build,
+  webpackBuildTasks(),
+  asciidoctorBuildTasks(),
+  marpBuildTasks(),
   series(
     parallel(webpack.server, asciidoctor.server),
-    parallel(webpack.watch, asciidoctor.watch, jest.watch, marp.watch)
+    parallel(webpack.watch, asciidoctor.watch, marp.watch),
+    parallel(jest.watch)
   )
 );
 
 exports.build = series(
-  webpack.clean,
-  webpack.build,
-  asciidoctor.clean,
-  asciidoctor.build,
-  marp.clean,
-  marp.build,
+  webpackBuildTasks(),
+  asciidoctorBuildTasks(),
+  marpBuildTasks(),
   prettier.format
 );
 
@@ -445,14 +452,12 @@ exports.format = series(prettier.format);
 exports.slides = series(marp.build);
 
 exports.docs = series(
-  asciidoctor.clean,
-  asciidoctor.build,
-  marp.clean,
-  marp.build,
+  asciidoctorBuildTasks(),
+  marpBuildTasks(),
   parallel(asciidoctor.server, asciidoctor.watch, marp.watch),
 );
 
-exports.watch = parallel(webpack.watch, asciidoctor.watch, jest.watch, marp.watch);
+exports.watch = parallel(webpack.watch, asciidoctor.watch, marp.watch, jest.watch);
 ```
 
 package.jsonのscript以下の内容に変更します。
@@ -464,9 +469,9 @@ package.jsonのscript以下の内容に変更します。
     "build": "gulp build",
     "test": "gulp test",
     "docs": "gulp docs",
+    "slides": "gulp slides",
     "watch": "gulp watch",
-    "format": "gulp format",
-    "slides": "gulp slides"
+    "format": "gulp format"
   }
 }
 ```
