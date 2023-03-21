@@ -912,6 +912,37 @@ Node.jsでは、ファイル名には「.js」の拡張子をつけることが�
 
 以上が、一般的なNode.jsファイル命名規則の例です。しかし、プロジェクトやチームによっては、異なる規則が使われる場合があります。
 
+### フォーマッタのセットアップ
+
+#### Preitterとは
+
+Prettierは、コードをフォーマットするためのツールです。コードのフォーマットを自動化することで、コードの品質を向上させることができます。
+
+#### パッケージのインストール
+
+```
+npm install --save-dev prettier
+```
+
+#### パッケージの設定
+
+package.jsonファイルに以下の設定を追加します。
+
+```js
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack server --config ./webpack.config.js --open",
+    "test": "jest --coverage",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+  },
+```
+
+#### フォーマッタの実行
+
+```
+npm run format
+```
+
 ### 開発ツールのセットアップ
 
 #### パッケージのインストール

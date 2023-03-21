@@ -6,7 +6,7 @@
 
 ## 概要
 
-JavaScriptはウェブ開発のための言語で、ECMAScriptはJavaScriptの仕様であり、バージョンアップによって新機能が追加されています。Node.jsはJavaScriptをサーバーサイドで実行するためのプログラムであり、npmと呼ばれるパッケージマネージャーを備えています。ES5とES6はJavaScriptのバージョンであり、ES6は構文や新機能の追加があり、Babelを使用することでES5に変換することができます。
+JavaScript はウェブ開発のための言語で、ECMAScript は JavaScript の仕様であり、バージョンアップによって新機能が追加されています。Node.js は JavaScript をサーバーサイドで実行するためのプログラムであり、npm と呼ばれるパッケージマネージャーを備えています。ES5 と ES6 は JavaScript のバージョンであり、ES6 は構文や新機能の追加があり、Babel を使用することで ES5 に変換することができます。
 
 ### 目的
 
@@ -47,20 +47,20 @@ npm start
 ### [配置](./docs/ship.adoc)
 
 - システムアーキテクチャ
-- GitHubとは
-- GitHub Actionsとは
-- Herokuとは
-- Vercelとは
+- GitHub とは
+- GitHub Actions とは
+- Heroku とは
+- Vercel とは
 
 **[⬆ back to top](#構成)**
 
 ### [運用](./docs/run.adoc)
 
-- NPMスクリプトとは
-- Gulpとは
-- Asciidocとは
-- BrowserSyncとは
-- 既存のnpmタスクを統合する
+- NPM スクリプトとは
+- Gulp とは
+- Asciidoc とは
+- BrowserSync とは
+- 既存の npm タスクを統合する
 
 **[⬆ back to top](#構成)**
 
@@ -74,6 +74,7 @@ npm start
 **[⬆ back to top](#構成)**
 
 ## 参照
+
 - [Conventional Commits 1.0.0](https://www.conventionalcommits.org/ja/v1.0.0/)
-- [最新版で学ぶwebpack 5入門Babel 7でES2021環境の構築](https://ics.media/entry/16028/)
-- [最新版TypeScript+webpack 5の環境構築まとめ](https://ics.media/entry/16329/#)
+- [最新版で学ぶ webpack 5 入門 Babel 7 で ES2021 環境の構築](https://ics.media/entry/16028/)
+- [最新版 TypeScript+webpack 5 の環境構築まとめ](https://ics.media/entry/16329/#)
